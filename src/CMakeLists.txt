@@ -20,3 +20,13 @@ if (ANDROID)
   # Support Android 15 16k page size.
   target_link_options(flutter_pty_new PRIVATE "-Wl,-z,max-page-size=16384")
 endif()
+
+if (OHOS)
+  # __OHOS__ 决定 src/flutter_pty.c 选哪份实现
+  target_compile_definitions(flutter_pty_new PRIVATE __OHOS__)
+
+  # hilog_ndk.z 供 forkpty_ohos.c 的 PTY_LOGE 使用
+  target_link_libraries(flutter_pty_new PRIVATE pthread hilog_ndk.z)
+
+  target_compile_options(flutter_pty_new PRIVATE -fPIC)
+endif()
